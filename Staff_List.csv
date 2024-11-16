@@ -1,10 +1,8 @@
 UserID,Name,Role,Gender,Age,Hashed Password,Salt
-D001,Patricia,Doctor,Female,20,6CShYgLVk8kN02vLfU3mSA==:nnS+UBLjGALqXvLlsv5ogQ==,nnS+UBLjGALqXvLlsv5ogQ==
-D002,Emily Clarke,Doctor,Female,38,FdoM/iqU/hq8NxfSKS9Gaw==:bLFhHPgo9SWrKYGM0OrSjA==,bLFhHPgo9SWrKYGM0OrSjA==
-P005,Mr Chong,Doctor,Male,21,5fZSih88CpWem0PDhWKcAA==:o0WbieKZLl2a5o9UbQFpNg==,o0WbieKZLl2a5o9UbQFpNg==
-D003,Tim,Doctor,Male,24,UmcXMNv3abPz42mu7eJRjA==:cAEIFOxaBuIGzAIXtlmW6A==,cAEIFOxaBuIGzAIXtlmW6A==
-P002,Alan,Pharmacist,Male,22,W391BTeDnEA/1k9L64ePng==:x2Fow8oWaPsNxJUN/K8dLA==,x2Fow8oWaPsNxJUN/K8dLA==
-P001,Mark Lee,Pharmacist,Male,29,R9tPDi4EXQK7t1wcu1+5Ig==:vIoyjii7kgk+CRFK9U86Og==,vIoyjii7kgk+CRFK9U86Og==
-P004,Peter,Pharmacist,Male,45,lyWK1huCLEq5uQmPBDMF9g==:mPBfIN/khYCVcHFCLyzMvg==,mPBfIN/khYCVcHFCLyzMvg==
-A010,rk,doctor,male,22,czxjJKaeTTKB5HSTtbeEHg==:eLAIERm1xi9Zj9bsAdm92g==,eLAIERm1xi9Zj9bsAdm92g==
-A001,sar,doctor,male,222,cQ8EpjUwG9hZCkMmQFOqdw==:zenKwGxAIUijoa9jY7zB1g==,zenKwGxAIUijoa9jY7zB1g==
+A001,Peter,Administrator,Male,30,r+5F7sgZSa7YJAXl6koZ/w==:xY9bua2cNGtiIHFOSpgMsg==,xY9bua2cNGtiIHFOSpgMsg==
+D001,Patricia,Doctor,Female,20,2tZrpFXFyKF9ZrQcK/gXAQ==:ZFgHCyZyRbfXeYb+envZQw==,ZFgHCyZyRbfXeYb+envZQw==
+D002,Emily Clarke,Doctor,Female,38,UzSA8N+39MN99asCspn/xQ==:EBtM2TU4sJqZjibhhslDPQ==,EBtM2TU4sJqZjibhhslDPQ==
+D003,Tim,Doctor,Male,24,r/V+lwIJfoQhKayndeSLOg==:fEByMKUVpp4VfLhlhB3S2Q==,fEByMKUVpp4VfLhlhB3S2Q==
+P002,Alan,Pharmacist,Male,22,aA+1QGGWOYPQepVkuOTMkg==:EiP3Vnlh1r+xx3ve53QrOQ==,EiP3Vnlh1r+xx3ve53QrOQ==
+P001,Mark Lee,Pharmacist,Male,29,7H8+ZK3qtIZUyVJDt1727w==:pAJ4vbDKEsdy+FemvzBjAQ==,pAJ4vbDKEsdy+FemvzBjAQ==
+P004,Peter,Pharmacist,Male,45,IrG2lcczd8peC2oxF/GEaQ==:Q8KrJ/11Vz411RHlbbOq7g==,Q8KrJ/11Vz411RHlbbOq7g==

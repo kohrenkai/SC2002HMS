@@ -28,31 +28,36 @@ public class Administrator extends User {
                 System.out.println("5. Return to main menu");
 
                 System.out.print("Enter your choice: ");
-                int choice = scanner.nextInt();
-                scanner.nextLine(); // Consume newline
+                if (scanner.hasNextInt()) {
+                    int choice = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline
 
-                switch (choice) {
-                    case 1:
-                        viewAndManageStaff();
-                        break;
-                    case 2:
-                        viewAppointments();
-                        break;
-                    case 3:
-                        manageInventory();
-                        break;
-                    case 4:
-                        approveReplenishmentRequest();
-                        break;
-                    case 5:
-                        logout();
-                        return;
-                    default:
-                        System.out.println("Invalid choice. Please try again.");
+                    switch (choice) {
+                        case 1:
+                            viewAndManageStaff();
+                            break;
+                        case 2:
+                            viewAppointments();
+                            break;
+                        case 3:
+                            manageInventory();
+                            break;
+                        case 4:
+                            approveReplenishmentRequest();
+                            break;
+                        case 5:
+                            logout();
+                            return;
+                        default:
+                            System.out.println("Invalid choice. Please try again.");
+                    }
+                } else {
+                    System.out.println("Invalid input. Please enter a number.");
+                    scanner.next(); // Consume the invalid input
                 }
             }
         } finally {
-            
+            scanner.close();
         }
     }
 
@@ -284,59 +289,84 @@ public class Administrator extends User {
                 System.out.println("6. Exit");
 
                 System.out.print("Enter your choice: ");
-                int choice = scanner.nextInt();
-                scanner.nextLine(); // Consume newline
+                if (scanner.hasNextInt()) {
+                    int choice = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline
 
-                switch (choice) {
-                    case 1:
-                        System.out.print("Enter Medication Name: ");
-                        String name = scanner.nextLine();
-                        System.out.print("Enter Initial Stock: ");
-                        int initialStock = scanner.nextInt();
-                        System.out.print("Enter Low Stock Level: ");
-                        int lowStockLevel = scanner.nextInt();
-                        scanner.nextLine(); // Consume newline
-                        inventoryManagement.addMedication(name, initialStock, lowStockLevel);
-                        break;
+                    switch (choice) {
+                        case 1:
+                            System.out.print("Enter Medication Name: ");
+                            String name = scanner.nextLine();
+                            System.out.print("Enter Initial Stock: ");
+                            if (scanner.hasNextInt()) {
+                                int initialStock = scanner.nextInt();
+                                System.out.print("Enter Low Stock Level: ");
+                                if (scanner.hasNextInt()) {
+                                    int lowStockLevel = scanner.nextInt();
+                                    scanner.nextLine(); // Consume newline
+                                    inventoryManagement.addMedication(name, initialStock, lowStockLevel);
+                                } else {
+                                    System.out.println("Invalid input for Low Stock Level. Please enter a number.");
+                                    scanner.next(); // Consume invalid input
+                                }
+                            } else {
+                                System.out.println("Invalid input for Initial Stock. Please enter a number.");
+                                scanner.next(); // Consume invalid input
+                            }
+                            break;
 
-                    case 2:
-                        System.out.print("Enter Medication Name to Remove: ");
-                        String removeName = scanner.nextLine();
-                        inventoryManagement.removeMedication(removeName);
-                        break;
+                        case 2:
+                            System.out.print("Enter Medication Name to Remove: ");
+                            String removeName = scanner.nextLine();
+                            inventoryManagement.removeMedication(removeName);
+                            break;
 
-                    case 3:
-                        System.out.print("Enter Medication Name to Update Stock Level: ");
-                        String updateName = scanner.nextLine();
-                        System.out.print("Enter New Stock Level: ");
-                        int newStockLevel = scanner.nextInt();
-                        scanner.nextLine(); // Consume newline
-                        inventoryManagement.updateStockLevel(updateName, newStockLevel);
-                        break;
+                        case 3:
+                            System.out.print("Enter Medication Name to Update Stock Level: ");
+                            String updateName = scanner.nextLine();
+                            System.out.print("Enter New Stock Level: ");
+                            if (scanner.hasNextInt()) {
+                                int newStockLevel = scanner.nextInt();
+                                scanner.nextLine(); // Consume newline
+                                inventoryManagement.updateStockLevel(updateName, newStockLevel);
+                            } else {
+                                System.out.println("Invalid input for New Stock Level. Please enter a number.");
+                                scanner.next(); // Consume invalid input
+                            }
+                            break;
 
-                    case 4:
-                        System.out.print("Enter Medication Name to Update Low Stock Level: ");
-                        String updateLowName = scanner.nextLine();
-                        System.out.print("Enter New Low Stock Level: ");
-                        int newLowStockLevel = scanner.nextInt();
-                        scanner.nextLine(); // Consume newline
-                        inventoryManagement.updateLowStockLevel(updateLowName, newLowStockLevel);
-                        break;
+                        case 4:
+                            System.out.print("Enter Medication Name to Update Low Stock Level: ");
+                            String updateLowName = scanner.nextLine();
+                            System.out.print("Enter New Low Stock Level: ");
+                            if (scanner.hasNextInt()) {
+                                int newLowStockLevel = scanner.nextInt();
+                                scanner.nextLine(); // Consume newline
+                                inventoryManagement.updateLowStockLevel(updateLowName, newLowStockLevel);
+                            } else {
+                                System.out.println("Invalid input for New Low Stock Level. Please enter a number.");
+                                scanner.next(); // Consume invalid input
+                            }
+                            break;
 
-                    case 5:
-                        inventoryManagement.printInventory();
-                        break;
+                        case 5:
+                            inventoryManagement.printInventory();
+                            break;
 
-                    case 6:
-                        System.out.println("Exiting inventory management...");
-                        return;
+                        case 6:
+                            System.out.println("Exiting inventory management...");
+                            return;
 
-                    default:
-                        System.out.println("Invalid choice. Please try again.");
+                        default:
+                            System.out.println("Invalid choice. Please try again.");
+                    }
+                } else {
+                    System.out.println("Invalid input. Please enter a number.");
+                    scanner.next(); // Consume invalid input
                 }
             }
         } finally {
-            
+            scanner.close();
         }
     }
 
