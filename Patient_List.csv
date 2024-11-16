@@ -1,0 +1,4 @@
+Patient ID,Name,Date of Birth,Gender,Blood Type,Contact Information,Hashed Password,Salt
+T001,Alice Brown,14/5/1980,Female,A+,rr,HTd1o5UICzY0gM5psWnnFA==:7r6mTHo8k/onzGqsJq1edA==,7r6mTHo8k/onzGqsJq1edA==
+T002,Bob Stone,22/11/1975,Male,B+,bob.stone@example.com,0etQL2sXF6GEPs7bIpEwJA==:PJAA3U0xDmPcYRtbAe3TfA==,PJAA3U0xDmPcYRtbAe3TfA==
+T003,Charlie White,8/7/1990,Male,O-,charlie.white@example.com,J1HsXLiMhC21CRIby/MKNw==:zLcuKbLqjLumRwDeMWMWSA==,zLcuKbLqjLumRwDeMWMWSA==

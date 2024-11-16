@@ -1,0 +1,8 @@
+Medicine Name,Initial Stock,Low Stock Level Alert,Replenishment Request
+Paracetamol,30,20,false
+Ibuprofen,50,10,false
+Amoxicillin,75,15,false
+Acetaminophen,40,100,false
+Miracle Cure,1,100,false
+xe,10,4,false
+xe,20,4,false
