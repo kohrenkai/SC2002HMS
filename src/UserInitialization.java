@@ -24,7 +24,7 @@ public class UserInitialization {
         // Process user data
         for (int i = 1; i < userData.size(); i++) {
             String[] user = userData.get(i);
-            String password = "password"; // Default password
+            String password = "PASSWORD"; // Default password
             byte[] salt = PasswordUtils.generateSalt();
             String hashedPassword = null;
             try {

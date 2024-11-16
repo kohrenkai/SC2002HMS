@@ -250,24 +250,21 @@ public class Administrator extends User {
 
     public void viewAppointments() {
         System.out.println("Viewing appointments...");
-        List<Appointment> patientAppointments = AppointmentManager.getAppointments();
-        boolean hasOutcomes = false;
+        List<Appointment> appointments = AppointmentManager.getAppointments();
         
-        System.out.println("Appointment Outcomes");
-        for (Appointment appointment : patientAppointments) {
-            if (appointment.getPatientId() != null && appointment.getPatientId().equals(this.getUserID())) {
-                // Check if the appointment has an outcome
-                if (appointment.getOutcome() != null) {
-                    hasOutcomes = true;
-                    System.out.println("\nAppointment on " + appointment.getDate() + " at " + appointment.getTimeSlot());
-                    // Display outcome details
-                    appointment.getOutcome().displayOutcome();
-                }
+        System.out.println("Scheduled Appointments:");
+        for (Appointment appointment : appointments) {
+            System.out.println("\nPatient ID: " + (appointment.getPatientId() != null ? appointment.getPatientId() : "N/A"));
+            System.out.println("Doctor ID: " + (appointment.getDoctorId() != null ? appointment.getDoctorId() : "N/A"));
+            System.out.println("Status: " + appointment.getStatus());
+            System.out.println("Date: " + appointment.getDate());
+            System.out.println("Time: " + appointment.getTimeSlot());
+            
+            // Display outcome details if the appointment is completed
+            if (appointment.getStatus() == Appointment.Status.COMPLETED && appointment.getOutcome() != null) {
+                System.out.println("Appointment Outcome:");
+                appointment.getOutcome().displayOutcome();
             }
-        }
-
-        if (!hasOutcomes) {
-            System.out.println("No appointment outcomes available for your past appointments.");
         }
     }
     

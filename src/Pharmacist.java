@@ -21,15 +21,14 @@ public class Pharmacist extends User {
         Scanner scanner = new Scanner(System.in);
         int choice;
 
-        try {
+        
             do {
                 System.out.println("\nPharmacist Menu:");
-                System.out.println("1. View Appointment Outcome Record");
-                System.out.println("2. Update Prescription Status");
-                System.out.println("3. View Medication Inventory");
-                System.out.println("4. Check Stock Levels");
-                System.out.println("5. Submit Replenishment Request");
-                System.out.println("6. Logout");
+                System.out.println("1. View and Update Appointment Outcome Record");
+                System.out.println("2. View Medication Inventory");
+                System.out.println("3. Check Stock Levels");
+                System.out.println("4. Submit Replenishment Request");
+                System.out.println("5. Logout");
                 System.out.print("Enter your choice: ");
 
                 while (!scanner.hasNextInt()) { // Input validation
@@ -41,67 +40,56 @@ public class Pharmacist extends User {
 
                 switch (choice) {
                     case 1:
-                        viewAppointmentOutcomeRecord();
+                        viewAndUpdateAppointmentOutcomeRecord(scanner);
                         break;
                     case 2:
-                        updatePrescriptionStatus(scanner);
-                        break;
-                    case 3:
                         viewMedicationInventory();
                         break;
-                    case 4:
+                    case 3:
                         checkStockLevels();
                         break;
-                    case 5:
+                    case 4:
                         submitReplenishmentRequest(scanner);
                         break;
-                    case 6:
+                    case 5:
                         logout();
                         return;
                     default:
                         System.out.println("Invalid choice. Please try again.");
                 }
-            } while (choice != 6);
-        } finally {
-            
-        }
+            } while (choice != 5);
+        
     }
 
-    private void viewAppointmentOutcomeRecord() {
-        // Placeholder for viewing appointment outcome records
-        System.out.println("Displaying appointment outcome records...");
-    }
-
-    private void updatePrescriptionStatus(Scanner scanner) {
-        // Step 1: Filter appointments that have a non-null and non-empty medication
+    private void viewAndUpdateAppointmentOutcomeRecord(Scanner scanner) {
         List<Appointment> appointmentsWithPrescriptions = new ArrayList<>();
         for (Appointment appointment : AppointmentManager.getAppointments()) {
-            if (appointment.getOutcome() != null && appointment.getOutcome().getMedication() != null) {
+            if (appointment.getOutcome() != null && appointment.getOutcome().getMedication() != null && !appointment.getOutcome().getMedication().isEmpty()) {
                 appointmentsWithPrescriptions.add(appointment);
             }
         }
 
-        // Step 2: Check if there are any appointments with prescriptions
         if (appointmentsWithPrescriptions.isEmpty()) {
             System.out.println("No appointments with prescriptions to update.");
             return;
         }
 
-        // Step 3: Display the filtered appointments with prescription details
         System.out.println("\nAppointments with Prescriptions:");
         for (int i = 0; i < appointmentsWithPrescriptions.size(); i++) {
             Appointment appointment = appointmentsWithPrescriptions.get(i);
             System.out.println((i + 1) + ". Medication: " + appointment.getOutcome().getMedication());
             System.out.println("   Current Medication Status: " + appointment.getOutcome().getMedStatus());
+            System.out.println("   Patient ID: " + appointment.getPatientId());
+            System.out.println("   Doctor ID: " + appointment.getDoctorId());
+            System.out.println("   Date: " + appointment.getDate());
+            System.out.println("   Time: " + appointment.getTimeSlot());
             System.out.println("--------------------------------------");
         }
 
-        // Step 4: Let the user select which appointment to update
         System.out.print("Select the appointment number to update the medication status (or 0 to cancel): ");
         int choice = scanner.nextInt();
         scanner.nextLine(); // Consume the newline character
 
-        // Step 5: Validate the user's choice
         if (choice == 0) {
             System.out.println("Update cancelled.");
             return;
@@ -112,16 +100,22 @@ public class Pharmacist extends User {
             return;
         }
 
-        // Step 6: Update the selected appointment's medication status
         Appointment selectedAppointment = appointmentsWithPrescriptions.get(choice - 1);
-        System.out.print("Enter the new medication status: ");
-        String newStatus = scanner.nextLine();
+        String medicationName = selectedAppointment.getOutcome().getMedication();
 
-        // Update the status in the appointment outcome
-        selectedAppointment.getOutcome().setMedStatus(newStatus);
-        System.out.println("Medication status updated successfully!");
+        System.out.print("Enter the quantity to dispense: ");
+        int quantity = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
+
+        if (inventoryManagement.checkStock(medicationName, quantity)) {
+            inventoryManagement.dispenseMedication(medicationName, quantity);
+            selectedAppointment.getOutcome().setMedStatus("Dispensed");
+            System.out.println("Medication status updated to 'Dispensed' and quantity adjusted in inventory.");
+            AppointmentManager.saveAppointmentsToCSV(); // Save the updated status to CSV
+        } else {
+            System.out.println("Insufficient stock for " + medicationName + ". Please check inventory and try again.");
+        }
     }
-
 
     private void viewMedicationInventory() {
         inventoryManagement.printInventory();
@@ -138,6 +132,4 @@ public class Pharmacist extends User {
 
         inventoryManagement.submitReplenishmentRequest(name); // Call to submit replenishment request
     }
-
-    
 }

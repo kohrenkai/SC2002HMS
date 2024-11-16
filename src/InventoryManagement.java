@@ -151,4 +151,19 @@ public class InventoryManagement {
             System.out.println("Medication not found or does not need replenishment: " + medicationName);
         }
     }
+    public boolean checkStock(String name, int quantity) {
+        Medication medication = medicationMap.get(name);
+        if (medication != null && medication.getStockLevel() >= quantity) {
+            return true;
+        }
+        return false;
+    }
+    public void dispenseMedication(String name, int quantity) {
+        Medication medication = medicationMap.get(name);
+        if (medication != null) {
+            medication.setStockLevel(medication.getStockLevel() - quantity);
+            saveInventoryToCSV();
+            System.out.println(quantity + " units of " + name + " dispensed. New stock level: " + medication.getStockLevel());
+        }
+    }
 }
