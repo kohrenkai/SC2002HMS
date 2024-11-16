@@ -1,7 +1,7 @@
 import java.util.Scanner;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Base64;
+
 
 public abstract class User {
     public enum Role { PATIENT, DOCTOR, PHARMACIST, ADMINISTRATOR }
@@ -11,17 +11,13 @@ public abstract class User {
     protected String name;
     protected Role role;
 
-    // Constructor to initialize User object with secure password handling
-    public User(String userID, String password, String name, Role role) {
+    // Constructor to initialize User object with hashed password and salt from CSV
+    public User(String userID, String hashedPassword, String salt, String name, Role role) {
         this.userID = userID;
+        this.hashedPassword = hashedPassword;
+        this.salt = salt;
         this.name = name;
         this.role = role;
-        try {
-            this.salt = Base64.getEncoder().encodeToString(PasswordUtils.generateSalt());
-            this.hashedPassword = PasswordUtils.hashPassword(password, Base64.getDecoder().decode(this.salt));
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new RuntimeException("Error initializing user password", e);
-        }
     }
 
     // Method to authenticate user login
@@ -66,7 +62,7 @@ public abstract class User {
             }
 
             passwordManager.changePassword(this, newPassword1);
-            System.out.println("Password changed successfully.");
+            
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new RuntimeException("Error changing user password", e);
         }

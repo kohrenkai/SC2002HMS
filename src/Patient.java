@@ -6,9 +6,9 @@ import java.util.Scanner;
 public class Patient extends User {
     private MedicalRecord medicalRecord;
 
-    public Patient(String id, String name, String password, String dateOfBirth, String gender, 
-                   String bloodType, String contactInformation) {
-        super(id, name, password, Role.PATIENT); 
+    public Patient(String id, String hashedPassword, String salt, String name, String dateOfBirth, 
+                   String gender, String bloodType, String contactInformation) {
+        super(id, hashedPassword, salt, name, Role.PATIENT); 
         this.medicalRecord = new MedicalRecord(id, name, dateOfBirth, gender, contactInformation, bloodType, null, null);
     }
 

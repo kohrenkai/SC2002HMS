@@ -4,12 +4,11 @@ import java.security.spec.InvalidKeySpecException;
 
 
 public class Administrator extends User {
-	//can create an interface for this 
     private CSVUtility csvUtility;
     private InventoryManagement inventoryManagement;
 
-    public Administrator(String userID, String password, String name) {
-        super(userID, password, name, User.Role.ADMINISTRATOR);
+    public Administrator(String userID, String hashedPassword, String salt, String name) {
+        super(userID, hashedPassword, salt, name, User.Role.ADMINISTRATOR);
         this.csvUtility = new CSVUtility("Staff_List.csv");
         this.inventoryManagement = new InventoryManagement("Medicine_List.csv");
     }
@@ -57,7 +56,7 @@ public class Administrator extends User {
                 }
             }
         } finally {
-            scanner.close();
+            
         }
     }
 

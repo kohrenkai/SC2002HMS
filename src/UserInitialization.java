@@ -34,6 +34,7 @@ public class UserInitialization {
             }
             userData.set(i, addHashedPasswordAndSalt(user, hashedPassword, salt, headers));
             System.out.println(userType + " UserID: " + user[0] + ", Password: " + password);
+            System.out.println("hashed password in user initialisation " + hashedPassword + ":" + salt );
         }
 
         // Write updated data back to CSV file

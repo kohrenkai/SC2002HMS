@@ -3,12 +3,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Pharmacist extends User {
-
     private InventoryManagement inventoryManagement;
     private PrescriptionManager prescriptionManager;
 
-    public Pharmacist(String userID, String password, String name) {
-        super(userID, password, name, Role.PHARMACIST);
+    public Pharmacist(String userID, String hashedPassword, String salt, String name) {
+        super(userID, hashedPassword, salt, name, Role.PHARMACIST);
         inventoryManagement = new InventoryManagement("Medicine_List.csv"); // Use relative path
         prescriptionManager = new PrescriptionManager();
     }

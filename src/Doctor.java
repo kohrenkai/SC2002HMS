@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Doctor extends User {
-
     private String gender;
     private int age;
     
@@ -11,8 +10,8 @@ public class Doctor extends User {
     private static List<User> patientUsers = new ArrayList<>();
     
     // Constructor to initialize the Doctor object
-    public Doctor(String id, String name, String password, String gender, int age) {
-        super(id, name, password, Role.DOCTOR);  // Role is set to DOCTOR
+    public Doctor(String id, String hashedPassword, String salt, String name, String gender, int age) {
+        super(id, hashedPassword, salt, name, Role.DOCTOR);  // Role is set to DOCTOR
         this.gender = gender;
         this.age = age;
         doctorsList.add(this);

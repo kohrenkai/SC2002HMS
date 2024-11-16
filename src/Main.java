@@ -66,18 +66,20 @@ public class Main {
         List<String[]> patientData = patientCSV.readCSV();
         List<String[]> staffData = staffCSV.readCSV();
 
-        // Find the index of the "Hashed Password" header in patient CSV
+        // Find the index of the "Hashed Password" and "Salt" headers in patient CSV
         int hashedPasswordIndex = -1;
+        int saltIndex = -1;
         String[] patientHeaders = patientData.get(0);
         for (int i = 0; i < patientHeaders.length; i++) {
             if (patientHeaders[i].equals("Hashed Password")) {
                 hashedPasswordIndex = i;
-                break;
+            } else if (patientHeaders[i].equals("Salt")) {
+                saltIndex = i;
             }
         }
 
-        if (hashedPasswordIndex == -1) {
-            System.err.println("Hashed Password header not found in patient CSV.");
+        if (hashedPasswordIndex == -1 || saltIndex == -1) {
+            System.err.println("Hashed Password or Salt header not found in patient CSV.");
             return null;
         }
 
@@ -85,10 +87,10 @@ public class Main {
         for (int i = 1; i < patientData.size(); i++) {
             String[] user = patientData.get(i);
             if (user[0].equals(userID)) {
-                String storedPassword = user[hashedPasswordIndex];
+                String storedPassword = user[hashedPasswordIndex] + ":" + user[saltIndex];
                 try {
                     if (PasswordUtils.validatePassword(password, storedPassword)) {
-                    	return new Patient(userID, user[1], password, user[2], user[3], user[4], user[5]);
+                        return new Patient(userID, user[hashedPasswordIndex], user[saltIndex], user[1], user[2], user[3], user[4], user[5]);
                     }
                 } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
                     e.printStackTrace();
@@ -96,36 +98,38 @@ public class Main {
             }
         }
 
-        // Find the index of the "Hashed Password" header in staff CSV
+        // Find the index of the "Hashed Password" and "Salt" headers in staff CSV
         hashedPasswordIndex = -1;
+        saltIndex = -1;
         String[] staffHeaders = staffData.get(0);
         for (int i = 0; i < staffHeaders.length; i++) {
             if (staffHeaders[i].equals("Hashed Password")) {
                 hashedPasswordIndex = i;
-                break;
+            } else if (staffHeaders[i].equals("Salt")) {
+                saltIndex = i;
             }
         }
 
-        if (hashedPasswordIndex == -1) {
-            System.err.println("Hashed Password header not found in staff CSV.");
+        if (hashedPasswordIndex == -1 || saltIndex == -1) {
+            System.err.println("Hashed Password or Salt header not found in staff CSV.");
             return null;
         }
 
         // Process staff data
         for (int i = 1; i < staffData.size(); i++) {
-            String[] user = staffData.get(i); 
+            String[] user = staffData.get(i);
             if (user[0].equals(userID)) {
-                String storedPassword = user[hashedPasswordIndex];
+                String storedPassword = user[hashedPasswordIndex] + ":" + user[saltIndex];
                 try {
                     if (PasswordUtils.validatePassword(password, storedPassword)) {
                         User.Role role = determineUserRole(userID);
                         switch (role) {
                             case ADMINISTRATOR:
-                                return new Administrator(userID, password, user[1]);
+                                return new Administrator(userID, user[hashedPasswordIndex], user[saltIndex], user[1]);
                             case DOCTOR:
-                            	return new Doctor(user[0], user[1], user[2], user[3], Integer.parseInt(user[4]));
+                                return new Doctor(userID, user[hashedPasswordIndex], user[saltIndex], user[1], user[3], Integer.parseInt(user[4]));
                             case PHARMACIST:
-                                return new Pharmacist(userID, password, user[1]);
+                                return new Pharmacist(userID, user[hashedPasswordIndex], user[saltIndex], user[1]);
                         }
                     }
                 } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {

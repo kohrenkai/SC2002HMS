@@ -15,6 +15,7 @@ public class PasswordManager {
             System.out.println("Password must have at least 6 characters, including uppercase, lowercase, numbers, and special characters.");
             return;
         }
+        System.out.println("Password changed successfully.");
 
         byte[] salt = PasswordUtils.generateSalt();
         String hashedPassword = PasswordUtils.hashPassword(newPassword, salt);
