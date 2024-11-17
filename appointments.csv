@@ -1,5 +1,8 @@
-D003,T001,1010,10:00,COMPLETED,2,Amoxicillin,Dispensed,ee
-D003,null,2020,10:00,PENDING,,,,
-T001,D003,10,10:00,COMPLETED,,,,
-T002,D002,2020-10-10,10:00,COMPLETED,,,,
-D003,null,2020,10:00,PENDING,,,,
+doctorId,patientId,date,timeSlot,status,service,medication,medStatus,notes
+D002,,2020-10-10,10:00,PENDING,,,,
+D002,,2020-10-10,11:00,PENDING,,,,
+D002,,2024-02-28,10:00,PENDING,,,,
+D003,T001,2020-10-10,14:00,COMPLETED,xray,Miracle Cure,Pending,need alot
+D003,T002,1999-12-19,12:00,COMPLETED,xray,Miracle Cure,Dispensed,alot
+D003,,2020-10-10,15:00,PENDING,,,,
+D003,,1000-10-10,10:00,PENDING,,,,

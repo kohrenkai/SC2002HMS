@@ -15,10 +15,9 @@ public class Main {
     private static List<User> patientUsers = new ArrayList<>();
 
     public static void main(String[] args) {
+    	 AppointmentManager.loadAppointmentsFromCSV("appointments.csv");
 
-    	
     	loadPatientsFromCSV();
-        AppointmentManager.loadAppointmentsFromCSV();
         displayLoginMenu();
         
     }
@@ -38,6 +37,8 @@ public class Main {
         }
         return patientUsers;
     }
+    
+    
     
 
     private static void displayLoginMenu() {

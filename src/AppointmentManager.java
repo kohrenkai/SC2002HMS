@@ -8,54 +8,55 @@ public class AppointmentManager {
     private static List<Appointment> appointments = new ArrayList<>();
     private static final String APPOINTMENTS_FILE = "appointments.csv";
 
-    // Load appointments from CSV file
-    public static List<Appointment> loadAppointmentsFromCSV() {
-        appointments.clear();
-        try (BufferedReader br = new BufferedReader(new FileReader(APPOINTMENTS_FILE))) {
+    
+    public static void loadAppointmentsFromCSV(String filePath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
-            while ((line = br.readLine()) != null) {
+            boolean isFirstRow = true; // Flag to check if it's the header
+
+            while ((line = reader.readLine()) != null) {
+                if (isFirstRow) { 
+                    isFirstRow = false; // Skip the header row
+                    continue;
+                }
+
                 Appointment appointment = Appointment.fromCSV(line);
-                appointments.add(appointment);
+                if (appointment != null) {
+                    appointments.add(appointment);
+                }
             }
         } catch (IOException e) {
-            System.out.println("Error reading from CSV file: " + e.getMessage());
+            System.out.println("Error reading appointments CSV: " + e.getMessage());
         }
-        return appointments;
     }
+
+
 
     // Add a new appointment
     public static void addAppointment(Appointment appointment) {
-        appointments.add(appointment);
-        saveAppointmentsToCSV();  // Save after adding new appointment
-    }
-
-    // Save all appointments to CSV
-    public static void saveAppointmentsToCSV() {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(APPOINTMENTS_FILE))) {
-            for (Appointment appointment : appointments) {
-                StringBuilder line = new StringBuilder();
-                line.append(appointment.getDoctorId()).append(",")
-                    .append(appointment.getPatientId()).append(",")
-                    .append(appointment.getDate()).append(",")
-                    .append(appointment.getTimeSlot()).append(",")
-                    .append(appointment.getStatus());
-
-                // Adding the service, medication, medStatus, and notes to the CSV
-                if (appointment.getOutcome() != null) {
-                    AppointmentOutcome outcome = appointment.getOutcome();
-                    line.append(",").append(outcome.getService())
-                        .append(",").append(outcome.getMedication())
-                        .append(",").append(outcome.getMedStatus())
-                        .append(",").append(outcome.getNotes());
-                } else {
-                    line.append(",,,,"); // Fill with empty values if no outcome
-                }
-                writer.println(line);
-            }
-        } catch (IOException e) {
-            System.out.println("Error saving appointments: " + e.getMessage());
+        if (!isAvailabilityConflict(appointment.getDoctorId(), appointment.getDate(), appointment.getTimeSlot())) {
+            appointments.add(appointment);
+            System.out.println("Appointment added successfully!");
+            saveAppointmentsToCSV();
+        } else {
+            System.out.println("Error: Doctor already has an appointment at this time.");
         }
     }
+ 
+ // Save all appointments to CSV
+    public static void saveAppointmentsToCSV() {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(APPOINTMENTS_FILE))) {
+            // Write header
+            writer.println("doctorId,patientId,date,timeSlot,status,service,medication,medStatus,notes");
+
+            for (Appointment appointment : appointments) {
+                writer.println(appointment.toCSV());
+            }
+        } catch (IOException e) {
+            System.err.println("Error saving appointments: " + e.getMessage());
+        }
+    }
+
 
     public static void updateAppointmentInCSV(Appointment updatedAppointment) {
         List<Appointment> allAppointments = getAppointmentsFromCSVForValidation();
@@ -86,7 +87,7 @@ public class AppointmentManager {
         return appointments;
     }
 
-    public static void viewPatientAppointments(String patientId) {
+  /*  public static void viewPatientAppointments(String patientId) {
         System.out.println("Your scheduled appointments:");
         boolean found = false;
         for (Appointment appointment : appointments) {
@@ -99,7 +100,7 @@ public class AppointmentManager {
         if (!found) {
             System.out.println("You have no scheduled appointments.");
         }
-    }
+    } */
 
     public static void viewAvailableSlots() {
         boolean found = false;
@@ -152,22 +153,24 @@ public class AppointmentManager {
     }
     
     public static boolean rescheduleAppointment(String patientId, Appointment oldAppointment, Appointment newSlot) {
-        if (newSlot.isAvailable()) {
-            // First cancel the old appointment
+        if (newSlot.isAvailable() && !isAvailabilityConflict(newSlot.getDoctorId(), newSlot.getDate(), newSlot.getTimeSlot())) {
+            // Cancel the old appointment
             oldAppointment.setStatus(Appointment.Status.PENDING);
             oldAppointment.setPatientId(null);
 
-            // Now set the new appointment
+            // Set the new appointment
             newSlot.setPatientId(patientId);
             newSlot.setStatus(Appointment.Status.REQUESTED);
-            appointments.add(newSlot);  // Add new slot to the list
-            saveAppointmentsToCSV();    // Save changes
+
+            saveAppointmentsToCSV(); // Save changes after modification
+            System.out.println("Appointment rescheduled successfully!");
             return true;
         } else {
-            System.out.println("Selected slot is no longer available.");
+            System.out.println("Selected slot is not available.");
             return false;
         }
     }
+
 
     public static void processDoctorAppointmentRequests(String doctorId) {
         System.out.println("\nHandling Appointment Requests:");
@@ -176,7 +179,9 @@ public class AppointmentManager {
         // Filter appointments for the specific doctor with status 'REQUESTED'
         List<Appointment> pendingAppointments = new ArrayList<>();
         for (Appointment appointment : appointments) {
-            if (appointment.getDoctorId().equals(doctorId) && appointment.getStatus() == Appointment.Status.REQUESTED) {
+            // Safely check if doctorId is not null before calling .equals
+            if (appointment.getDoctorId() != null && appointment.getDoctorId().equals(doctorId) 
+                    && appointment.getStatus() == Appointment.Status.REQUESTED) {
                 pendingAppointments.add(appointment);
             }
         }
@@ -214,18 +219,20 @@ public class AppointmentManager {
         }
     }
 
-    public static boolean isAvailabilityConflict(String doctorId, String date, String timeSlot) {
-        List<Appointment> appointmentsForValidation = getAppointmentsFromCSVForValidation();
 
-        for (Appointment appointment : appointmentsForValidation) {
-            if (appointment.getDoctorId().equals(doctorId) &&
+    public static boolean isAvailabilityConflict(String doctorId, String date, String timeSlot) {
+        for (Appointment appointment : appointments) {
+            if (appointment.getDoctorId() != null && appointment.getDoctorId().equals(doctorId) &&
                 appointment.getDate().equals(date) &&
-                appointment.getTimeSlot().equals(timeSlot)) {
-                return true; // Conflict found
+                appointment.getTimeSlot().equals(timeSlot) &&
+                appointment.getStatus() != Appointment.Status.COMPLETED && 
+                appointment.getStatus() != Appointment.Status.CANCELED) {
+                return true;
             }
         }
-        return false; // No conflict
+        return false;
     }
+
 
     public static void handleDoctorAvailability(String doctorId, String date, String timeSlot) {
         // Check if the availability already exists
@@ -237,6 +244,7 @@ public class AppointmentManager {
         // If no conflict, add the new appointment
         Appointment appointment = new Appointment(date, timeSlot, Appointment.Status.PENDING);
         appointment.setDoctorId(doctorId);
+        appointment.setPatientId(null); 
         addAppointment(appointment);
         saveAppointmentsToCSV(); // Save to CSV file
         System.out.println("Availability set successfully!");
@@ -259,9 +267,14 @@ public class AppointmentManager {
                 // Split the line into columns
                 String[] data = line.split(",");
                 
+                // Log and inspect data for validation
+                System.out.println("Raw CSV line: " + line); // Log the whole line for inspection
+                System.out.println("Number of columns in this row: " + data.length); // Log the number of columns
+
                 // Ensure there are enough columns (doctorId, patientId, date, timeSlot, status, service, medication, medStatus, notes)
                 if (data.length < 9) {
-                    continue;
+                    System.out.println("Skipping incomplete row: " + line); // Log incomplete rows
+                    continue; // Skip incomplete rows
                 }
                 
                 // Extract and trim the fields from the CSV
@@ -274,6 +287,14 @@ public class AppointmentManager {
                 String medication = data[6].trim();
                 String medStatus = data[7].trim();
                 String notes = data[8].trim();
+
+                // Log the extracted data for debugging
+                System.out.println("Extracted doctorId: " + doctorId); // Log extracted doctorId
+                System.out.println("Extracted patientId: " + patientId); // Log extracted patientId
+                System.out.println("Extracted date: " + date); // Log extracted date
+                System.out.println("Extracted timeSlot: " + timeSlot); // Log extracted timeSlot
+                System.out.println("Extracted status: " + statusStr); // Log extracted status
+                System.out.println("Extracted service: " + service); // Log extracted service field
 
                 // Parse the status safely
                 Appointment.Status status;
@@ -290,14 +311,25 @@ public class AppointmentManager {
                 appointment.setPatientId(patientId);
 
                 // Create the AppointmentOutcome object
-                AppointmentOutcome outcome = new AppointmentOutcome(service, medication, medStatus, notes);
+                AppointmentOutcome outcome = new AppointmentOutcome();
+                outcome.setService(service);  // Set the service field
+                outcome.setMedication(medication);
+                outcome.setMedStatus(medStatus);
+                outcome.setNotes(notes);
+
+                // Set the outcome in the Appointment object
                 appointment.setOutcome(outcome);
 
+                // Add the appointment to the list
                 appointmentsForValidation.add(appointment);
             }
         } catch (IOException e) {
             System.out.println("Error reading appointments from CSV: " + e.getMessage());
         }
+
         return appointmentsForValidation;
     }
+
+
 }
+

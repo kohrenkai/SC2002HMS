@@ -67,29 +67,77 @@ public class Appointment {
     
  // Convert Appointment object to CSV string
     public String toCSV() {
-        return (patientId != null ? patientId : "") + "," + 
-               (doctorId != null ? doctorId : "") + "," + 
-               date + "," + timeSlot + "," + status;
+        StringBuilder line = new StringBuilder();
+        line.append(doctorId != null ? doctorId : "").append(",")
+            .append(patientId != null ? patientId : "").append(",")
+            .append(date).append(",")
+            .append(timeSlot).append(",")
+            .append(status);
+
+        // Append outcome details only if it's not null
+        if (outcome != null) {
+            line.append(",").append(outcome.toCSV()); // outcome is serialized here
+        } else {
+            line.append(",,,,"); // If no outcome, add 4 empty fields
+        }
+
+        return line.toString();
     }
 
-    // Create Appointment object from CSV string
-    public static Appointment fromCSV(String csvLine) {
-        String[] tokens = csvLine.split(",");
-        String patientId = tokens[0].isEmpty() ? null : tokens[0];
-        String doctorId = tokens[1].isEmpty() ? null : tokens[1];
-        String date = tokens[2];
-        String timeSlot = tokens[3];
-        Status status = Status.valueOf(tokens[4].trim().toUpperCase());
 
+
+
+
+    public static Appointment fromCSV(String csvLine) {
+        // Split the line by commas
+        String[] tokens = csvLine.split(",");
+
+        // Validate that there are at least 5 tokens for the essential fields (doctorId, patientId, date, timeSlot, status)
+        if (tokens.length < 5) {
+            throw new IllegalArgumentException("Invalid CSV line, not enough tokens: " + csvLine);
+        }
+
+        // Extract basic appointment fields
+        String doctorId = tokens[0].isEmpty() ? null : tokens[0].trim();
+        String patientId = tokens[1].isEmpty() ? null : tokens[1].trim();
+        String date = tokens[2].trim();
+        String timeSlot = tokens[3].trim();
+        Status status;
+        try {
+            status = Status.valueOf(tokens[4].trim().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            status = Status.PENDING;  // Default to PENDING if the status is invalid
+        }
+
+        // Create a new Appointment object
         Appointment appointment = new Appointment(date, timeSlot, status);
-        appointment.setPatientId(patientId);
         appointment.setDoctorId(doctorId);
+        appointment.setPatientId(patientId);
+
+        // Extract outcome details if they exist (service, medication, medStatus, notes)
+        if (tokens.length > 5) {
+            AppointmentOutcome outcome = new AppointmentOutcome();
+
+            // If there are missing outcome fields, set default empty values
+            outcome.setService(tokens.length > 5 ? tokens[5].trim() : "");
+            outcome.setMedication(tokens.length > 6 ? tokens[6].trim() : "");
+            outcome.setMedStatus(tokens.length > 7 ? tokens[7].trim() : "");
+            outcome.setNotes(tokens.length > 8 ? tokens[8].trim() : "");
+
+            appointment.setOutcome(outcome);
+        }
+
         return appointment;
     }
+
+
+
+
 
     public boolean isAvailable() {
         return patientId == null && status == Status.PENDING;
     }
+    
 
     // Additional methods for handling appointment status transitions (e.g., canceling, confirming) can be added here
 }

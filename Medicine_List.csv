@@ -2,7 +2,7 @@ Medicine Name,Initial Stock,Low Stock Level Alert,Replenishment Request
 Paracetamol,30,20,false
 Ibuprofen,50,10,false
 Amoxicillin,73,15,false
-Acetaminophen,50,100,false
+Acetaminophen,60,100,false
 Acetic acid,30,10,false
 Miracle Cure,10,30,true
-Miracle Cure,20,10,false
+Miracle Cure,15,10,false

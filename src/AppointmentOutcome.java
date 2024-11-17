@@ -10,16 +10,10 @@ public class AppointmentOutcome {
     public AppointmentOutcome() {
         this.service = "";
         this.medication = "";
-        this.medStatus = "";
+        this.medStatus = "Pending";
         this.notes = "";
     }
-    public AppointmentOutcome(String service, String medication, String medStatus, String notes) {
-        this.service = service;
-        this.medication = medication;
-        this.medStatus = "Pending";
-        this.notes = notes;
-    }
-
+ 
     // Getters and Setters
     public String getService() {
         return service;
@@ -53,9 +47,6 @@ public class AppointmentOutcome {
         this.notes = notes;
     }
     
-    public String toCSV() {
-        return service + "," + medication + "," + medStatus + "," + notes;
-    }
 
     
     public void displayOutcome() {
@@ -63,8 +54,34 @@ public class AppointmentOutcome {
         System.out.println("Prescribed Medication: " + medication);
         System.out.println("Consultation Notes: " + notes);
     }
+    
+    public String toCSV() {
+        StringBuilder line = new StringBuilder();
+        // Append outcome fields (service, medication, medStatus, notes)
+        line.append(service != null ? service : "").append(",")
+            .append(medication != null ? medication : "").append(",")
+            .append(medStatus != null ? medStatus : "").append(",")
+            .append(notes != null ? notes : "");
 
+        return line.toString();
+    }
 
+    public static AppointmentOutcome fromCSV(String csvLine) {
+        String[] tokens = csvLine.split(",");
+
+        // Validate and parse the CSV line
+        if (tokens.length != 4) {
+            throw new IllegalArgumentException("Invalid AppointmentOutcome CSV line: " + csvLine);
+        }
+
+        AppointmentOutcome outcome = new AppointmentOutcome();
+        outcome.setService(tokens[0].trim());
+        outcome.setMedication(tokens[1].trim());
+        outcome.setMedStatus(tokens[2].trim());
+        outcome.setNotes(tokens[3].trim());
+
+        return outcome;
+    }
 
 
     @Override
