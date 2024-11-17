@@ -4,11 +4,11 @@ public class Medication {
     private int lowStockLevel;
     private boolean replenishmentRequest;
 
-    public Medication(String name, int stockLevel, int lowStockLevel) {
+    public Medication(String name, int stockLevel, int lowStockLevel ) {
         this.name = name;
         this.stockLevel = stockLevel;
         this.lowStockLevel = lowStockLevel;
-        this.replenishmentRequest = false; // Default to false
+        this.replenishmentRequest = false;
     }
 
     // Getters and setters for all fields

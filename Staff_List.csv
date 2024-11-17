@@ -1,8 +1,9 @@
 UserID,Name,Role,Gender,Age,Hashed Password,Salt
-A001,Peter,Administrator,Male,30,gRjOJOqDYcdGoVocYZddkQ==:Oh5W4c+rPg0yhAWtD+s58g==,Oh5W4c+rPg0yhAWtD+s58g==
-D001,Patricia,Doctor,Female,20,2XbXm2LPpuapl84eDWSSig==:au9SqGBI9cZ+31gttbsWqQ==,au9SqGBI9cZ+31gttbsWqQ==
-D002,Emily Clarke,Doctor,Female,38,WTp6evF6042zUscCbz8oRg==:oyRNYgcVoyLNDU6V3aEdjQ==,oyRNYgcVoyLNDU6V3aEdjQ==
-D003,Tim,Doctor,Male,24,iRqJthdEgCAsV097lHlaEA==:4PQaKuZwrgfxMRuCWEwH/Q==,4PQaKuZwrgfxMRuCWEwH/Q==
-P002,Alan,Pharmacist,Male,22,A7HrocL9jgKil7zXfFGveQ==:RVrj98k8qwuEwN2uYmrjMQ==,RVrj98k8qwuEwN2uYmrjMQ==
-P001,Mark Lee,Pharmacist,Male,29,XTAXcs+41FkpY3RNWOrK3w==:zbbBonFkYxF6Xc4l9cjn4w==,zbbBonFkYxF6Xc4l9cjn4w==
-P004,Peter,Pharmacist,Male,45,bEsbl6YlFIzd5252RjPIOQ==:rJvNXkX8p0MmxPS+7NdebQ==,rJvNXkX8p0MmxPS+7NdebQ==
+A001,Peter,Administrator,Male,30,bkzCvpXTCOynE4vRBaNz3w==:fJCC5iOrbr8D8xysEZZ0zw==,fJCC5iOrbr8D8xysEZZ0zw==
+D001,Patricia,Doctor,Female,20,qAXaewjeRC7sHSGMDv4Ayw==:AAN5uvB1tk18/SS/+EeHNA==,AAN5uvB1tk18/SS/+EeHNA==
+D003,Tim,Doctor,Male,24,LZAGS2A/38eM2QW60vALKg==:+zGiBcOjOh7B69u2mfuKNg==,+zGiBcOjOh7B69u2mfuKNg==
+D002,Belle,Doctor,Female,24,Kcy2egcV7ITiVpWfyq4E8w==:9LcvGUhlroeZXEoiV2idgg==,9LcvGUhlroeZXEoiV2idgg==
+P002,Alan,Pharmacist,Male,22,5XXve8/bPmQaDa409n7KEQ==:BbByJcQmNtDWRFb3y9GMLQ==,BbByJcQmNtDWRFb3y9GMLQ==
+P003,Thomas,Pharmacist,Male,23,sWPBqmVrEAiUgA1hv9rs0w==:j5i2RIyTnWsO25kHI03DLw==,j5i2RIyTnWsO25kHI03DLw==
+P001,Mark Lee,Pharmacist,Male,29,qtkLREg1X1umkc58rpftVg==:TnrOV1iWykAhWRsgdmm7Tg==,TnrOV1iWykAhWRsgdmm7Tg==
+P004,Uyen,Pharmacist,Female,22,HENS4Sa+zs7G8tccjKw/8g==:7IJOOh1nDkdCo9/wlkIk5g==,7IJOOh1nDkdCo9/wlkIk5g==

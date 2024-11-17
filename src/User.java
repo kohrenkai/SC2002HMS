@@ -2,16 +2,50 @@ import java.util.Scanner;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
-
+/**
+ * The User class represents a user in the system.
+ * It provides methods for user authentication, password management, and role-specific menu display.
+ */
 public abstract class User {
+    /**
+     * Enumeration of user roles.
+     */
     public enum Role { PATIENT, DOCTOR, PHARMACIST, ADMINISTRATOR }
+
+    /**
+     * The user ID of the user.
+     */
     protected String userID;
+
+    /**
+     * The hashed password of the user.
+     */
     protected String hashedPassword;
+
+    /**
+     * The salt used for hashing the password.
+     */
     protected String salt;
+
+    /**
+     * The name of the user.
+     */
     protected String name;
+
+    /**
+     * The role of the user.
+     */
     protected Role role;
 
-    // Constructor to initialize User object with hashed password and salt from CSV
+    /**
+     * Constructs a User object with the specified details.
+     *
+     * @param userID The user ID of the user.
+     * @param hashedPassword The hashed password of the user.
+     * @param salt The salt used for hashing the password.
+     * @param name The name of the user.
+     * @param role The role of the user.
+     */
     public User(String userID, String hashedPassword, String salt, String name, Role role) {
         this.userID = userID;
         this.hashedPassword = hashedPassword;
@@ -20,7 +54,13 @@ public abstract class User {
         this.role = role;
     }
 
-    // Method to authenticate user login
+    /**
+     * Authenticates the user login.
+     *
+     * @param userID The user ID entered by the user.
+     * @param password The password entered by the user.
+     * @return true if the login is successful, false otherwise.
+     */
     public boolean login(String userID, String password) {
         try {
             if (this.userID.equals(userID) && PasswordUtils.validatePassword(password, this.hashedPassword + ":" + this.salt)) {
@@ -35,12 +75,19 @@ public abstract class User {
         }
     }
 
-    // Method to log out the user
+    /**
+     * Logs out the user.
+     */
     public void logout() {
         System.out.println("Logging out user: " + userID);
     }
 
-    // Method to change the user's password
+    /**
+     * Changes the user's password.
+     *
+     * @param scanner The Scanner object for reading user input.
+     * @param passwordManager The PasswordManager object for managing password changes.
+     */
     public void changePassword(Scanner scanner, PasswordManager passwordManager) {
         try {
             System.out.println("Enter your current password:");
@@ -68,28 +115,54 @@ public abstract class User {
         }
     }
 
-    // Setters for hashed password and salt
+    /**
+     * Sets the hashed password of the user.
+     *
+     * @param hashedPassword The new hashed password.
+     */
     public void setHashedPassword(String hashedPassword) {
         this.hashedPassword = hashedPassword;
     }
 
+    /**
+     * Sets the salt used for hashing the password.
+     *
+     * @param salt The new salt.
+     */
     public void setSalt(String salt) {
         this.salt = salt;
     }
 
-    // Getters for userID, name, and role
+    /**
+     * Gets the user ID of the user.
+     *
+     * @return The user ID.
+     */
     public String getUserID() {
         return userID;
     }
 
+    /**
+     * Gets the name of the user.
+     *
+     * @return The name.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Gets the role of the user.
+     *
+     * @return The role.
+     */
     public Role getRole() {
         return role;
     }
 
-    // Abstract method to display role-specific menu (to be implemented by subclasses)
+    /**
+     * Displays the role-specific menu for the user.
+     * This method is abstract and must be implemented by subclasses.
+     */
     public abstract void displayRoleSpecificMenu();
 }
