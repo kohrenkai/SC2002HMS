@@ -102,6 +102,9 @@ public class MedicalRecord {
         }
     }
     
+  
+
+    
     // Method to display the medical record
     public void displayMedicalRecord() {
         System.out.println("Patient Name: " + name);

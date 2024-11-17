@@ -16,7 +16,7 @@ public class AppointmentOutcome {
     public AppointmentOutcome(String service, String medication, String medStatus, String notes) {
         this.service = service;
         this.medication = medication;
-        this.medStatus = medStatus;
+        this.medStatus = "Pending";
         this.notes = notes;
     }
 
@@ -56,12 +56,14 @@ public class AppointmentOutcome {
     public String toCSV() {
         return service + "," + medication + "," + medStatus + "," + notes;
     }
+
     
     public void displayOutcome() {
         System.out.println("Service Provided: " + service);
         System.out.println("Prescribed Medication: " + medication);
         System.out.println("Consultation Notes: " + notes);
     }
+
 
 
 

@@ -87,6 +87,10 @@ public class Appointment {
         return appointment;
     }
 
+    public boolean isAvailable() {
+        return patientId == null && status == Status.PENDING;
+    }
+
     // Additional methods for handling appointment status transitions (e.g., canceling, confirming) can be added here
 }
 

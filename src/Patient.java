@@ -16,18 +16,23 @@ public class Patient extends User {
     public void displayRoleSpecificMenu() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.println("\nPatient Menu:");
-            System.out.println("1. View Medical Record");
-            System.out.println("2. Update Personal Information");
-            System.out.println("3. View Available Appointment Slots");
-            System.out.println("4. Schedule an Appointment");
-            System.out.println("5. Reschedule an Appointment");
-            System.out.println("6. Cancel an Appointment");
-            System.out.println("7. View Scheduled Appointments");
-            System.out.println("8. View Past Appointment Outcome Records");
-            System.out.println("9. Logout");
-
-            System.out.print("Enter your choice: ");
+        	System.out.println("\n" + "=".repeat(50));
+    	    System.out.println(" ".repeat(15) + "PATIENT MENU");
+    	    System.out.println("=".repeat(50));
+    	    
+    	    System.out.println(" ".repeat(10) + "╔════════════════════════════════════╗ ");
+    	    System.out.println(" ".repeat(10) + "║   1. View Medical Record           ║ ");
+    	    System.out.println(" ".repeat(10) + "║   2. Update Personal Information   ║ ");
+    	    System.out.println(" ".repeat(10) + "║   3. View Available Appointments   ║ ");
+    	    System.out.println(" ".repeat(10) + "║   4. Schedule an Appointment       ║ ");
+    	    System.out.println(" ".repeat(10) + "║   5. Reschedule an Appointment     ║ ");
+    	    System.out.println(" ".repeat(10) + "║   6. Cancel an Appointment         ║ ");
+    	    System.out.println(" ".repeat(10) + "║   7. View Scheduled Appointments   ║ ");
+    	    System.out.println(" ".repeat(10) + "║   8. View Past Appointment Records ║ ");
+    	    System.out.println(" ".repeat(10) + "║   9. Logout                        ║ ");
+    	    System.out.println(" ".repeat(10) + "╚════════════════════════════════════╝ ");
+    	    
+    	    System.out.print("\nEnter your choice (1-9): ");
             int choice = scanner.nextInt();
             scanner.nextLine();
 
@@ -203,6 +208,28 @@ public class Patient extends User {
         System.out.println("New Appointment Details:");
         System.out.println("Doctor: " + newSlot.getDoctorId() + " Date: " + newSlot.getDate() 
                 + " Time: " + newSlot.getTimeSlot() + "Status: " + newSlot.getStatus());
+    }
+    
+    public static Patient fromCSV(String csvLine) {
+        String[] fields = csvLine.split(",");
+
+        if (fields.length != 8) { // Check if the expected number of fields is present
+            throw new IllegalArgumentException("Invalid CSV format for Patient: " + csvLine);
+        }
+
+        // Assuming the CSV format is:
+        // Patient ID, Name, Date of Birth, Gender, Blood Type, Contact Information, Hashed Password, Salt
+        String id = fields[0].trim();
+        String name = fields[1].trim();
+        String dateOfBirth = fields[2].trim();
+        String gender = fields[3].trim();
+        String bloodType = fields[4].trim();
+        String contactInformation = fields[5].trim();
+        String hashedPassword = fields[6].trim(); // Assuming this is the correct field for the password
+        String salt = fields[7].trim();  // Assuming this is the correct field for the salt
+
+        // Create and return a new Patient object with the parsed fields
+        return new Patient(id, hashedPassword, salt, name, dateOfBirth, gender, bloodType, contactInformation);
     }
 
 

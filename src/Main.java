@@ -1,5 +1,9 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -8,23 +12,55 @@ public class Main {
     private static CSVUtility staffCSV = new CSVUtility("Staff_List.csv");
     private static PasswordManager patientPasswordManager = new PasswordManager(patientCSV);
     private static PasswordManager staffPasswordManager = new PasswordManager(staffCSV);
+    private static List<User> patientUsers = new ArrayList<>();
 
     public static void main(String[] args) {
-        // Initialize users from CSV files
-        UserInitialization userInitialization = new UserInitialization(patientCSV, staffCSV);
-        userInitialization.initializeUsers();
 
-        // Main login menu
+    	
+    	loadPatientsFromCSV();
+        AppointmentManager.loadAppointmentsFromCSV();
         displayLoginMenu();
+        
     }
+    
+    public static List<User> loadPatientsFromCSV() {
+        patientUsers.clear(); // Clear the list before reloading
+        try (BufferedReader br = new BufferedReader(new FileReader("Patient_List.csv"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith("Patient ID")) continue; // Skip header line
+                Patient patient = Patient.fromCSV(line);
+                patientUsers.add(patient);  // Add the patient to the list
+              
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading patient CSV: " + e.getMessage());
+        }
+        return patientUsers;
+    }
+    
 
     private static void displayLoginMenu() {
         Scanner scanner = new Scanner(System.in);
         try {
             while (true) {
-                System.out.println("Login Menu");
+            	System.out.println("  _    _   _    _    ____  ");
+            	System.out.println(" | |  | | | \\  / |  / __|  ");
+            	System.out.println(" | |__| | |  \\/  | / /__   ");
+            	System.out.println(" |  __  | | |\\/| | \\__  \\  ");
+            	System.out.println(" | |  | | | |  | |  ___) | ");
+            	System.out.println(" |_|  |_| |_|  |_| |____/  ");
+
+                // Display Welcome Message
+                System.out.println("\nWelcome to the Hospital Management System!\n");
+                
+                // Display a border line
+                System.out.println("===============================");
+                
+                // Display menu options
+                System.out.println("Please enter your choice to continue:");
                 System.out.println("1. Login");
-                System.out.println("2. Terminate");
+                System.out.println("2. Exit");
                 System.out.print("Choose an option: ");
 
                 if (scanner.hasNextInt()) {
@@ -61,6 +97,7 @@ public class Main {
             scanner.close();
         }
     }
+
 
     private static User authenticateUser(String userID, String password) {
         List<String[]> patientData = patientCSV.readCSV();
@@ -156,11 +193,18 @@ public class Main {
     private static void displayPasswordChangeMenu(User user) {
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.println("Password Change Menu");
-            System.out.println("1. Change Password");
-            System.out.println("2. Display Role-Specific Menu");
-            System.out.println("3. Logout");
-            System.out.print("Choose an option: ");
+        	 System.out.println("\n" + "=".repeat(40));
+        	    System.out.println(" ".repeat(10) + "WELCOME TO HMS");
+        	    System.out.println("=".repeat(40));
+        	    System.out.println("Hello, " + user.getName() + "!\n");
+        	    
+        	    System.out.println("What would you like to do?");
+        	    System.out.println(" ".repeat(10) + "╔════════════════════════╗");
+        	    System.out.println(" ".repeat(10) + "║   1. Change Password   ║");
+        	    System.out.println(" ".repeat(10) + "║   2. Display Menu      ║");
+        	    System.out.println(" ".repeat(10) + "║   3. Logout            ║");
+        	    System.out.println(" ".repeat(10) + "╚════════════════════════╝");
+        	    System.out.print("\nChoose an option (1-3): ");
             
             if (scanner.hasNextInt()) {
                 int choice = scanner.nextInt();
@@ -186,5 +230,8 @@ public class Main {
                 scanner.nextLine(); // Consume invalid input
             }
         }
+    }
+    public static List<User> getPatientsList() {
+        return patientUsers;
     }
 }

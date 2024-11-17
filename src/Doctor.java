@@ -8,6 +8,7 @@ public class Doctor extends User {
     
     private static List<Doctor> doctorsList = new ArrayList<>();
     private static List<User> patientUsers = new ArrayList<>();
+
     
     // Constructor to initialize the Doctor object
     public Doctor(String id, String hashedPassword, String salt, String name, String gender, int age) {
@@ -72,22 +73,17 @@ public class Doctor extends User {
         }
     }
     
-    public static List<User> getPatientsList() { return patientUsers; }
     
     private Patient findPatientById(String patientId) {
-        // Ensure patientUsers is not null before searching
-        if (patientUsers == null) {
-            return null;
-        }
-        
-        // Loop through the list of patients
-        for (User user : patientUsers) {
-            if (user.getUserID().equals(patientId) && user instanceof Patient) {
-                return (Patient) user; // Cast User to Patient, as the list holds User objects
+        for (User user : Main.getPatientsList()) {
+            if (user.getUserID().equals(patientId)) {
+                return (Patient) user;
             }
         }
-        return null; // If patient is not found, return null
+        return null;
     }
+
+
 
     public void viewPatientMedicalRecords() {
         Scanner scanner = new Scanner(System.in);
@@ -165,7 +161,6 @@ public class Doctor extends User {
 
         // Get doctor's selection of the appointment
         int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline character
 
         if (choice < 1 || choice > confirmedAppointments.size()) {
             System.out.println("Invalid choice. Please try again.");
