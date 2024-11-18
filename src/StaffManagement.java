@@ -140,7 +140,7 @@ public class StaffManagement implements StaffManager {
         }
 
         // Generate a default password
-        String defaultPassword = "password";
+        String defaultPassword = "PASSWORD";
         // Generate salt
         byte[] salt = PasswordUtils.generateSalt();
         String hashedPassword = null;
